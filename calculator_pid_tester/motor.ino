@@ -18,18 +18,12 @@ int updatePid(int old_pwm, double targetRPM, double currentRPM) {
   static double last_error = 0;
   static double int_error = 0;
 
-
-  error = targetRPM - currentRPM;  
- 
+  error = targetRPM - currentRPM;   
     int_error += error;
     if(int_error > 1000) { int_error = 1000;}
-    else if(int_error < -1000) {int_error=-1000;}
-    pidTerm = Kp * error + Ki * int_error + Kd * (error - last_error);
+    else if(int_error < -1000) {int_error=-1000;}    
+    pidTerm = Kp * error + Ki * int_error + Kd * (error - last_error);    
     last_error = error;
-
-
-  //new_rpm = constrain(double(old_pwm) * MAX_RPM / 255.0 + pidTerm, -MAX_RPM, MAX_RPM);
-  //new_pwm = 255.0 * new_rpm / MAX_RPM;
   new_pwm = constrain(double(old_pwm) + pidTerm, -MAX_RPM, MAX_RPM);
   
   return int(new_pwm);
