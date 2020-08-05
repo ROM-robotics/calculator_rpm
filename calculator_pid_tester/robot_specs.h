@@ -8,5 +8,8 @@
 #define MAX_RPM         320 /// edit
 #define pi              3.1415926
 #define two_pi          6.2831853
-#define enc_ticks   1320
+#define enc_ticks       1320
+#define Kp              0.5
+#define Ki              0.05
+#define Kd              0.15
 #endif

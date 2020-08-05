@@ -1,50 +1,26 @@
-/* Author: Pyae Soan Aung (Ghostman @ greenhackers)
-*/
-#if (ARDUINO >= 100)
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#endif
-#include <Wire.h>
+/* Author: Pyae Soan Aung (ROM Robotics) */
+
+
 #include "robot_specs.h"
 
-#define right_encoderA      19    // (interrupt numbers 0)
-#define right_encoderB      18    // (interrupt numbers 1)
+#define right_encoderA      2   
+#define right_encoderB      3
 
-#define ENA1 5                    // PWM
-#define Right_in1 6
-#define Right_in2 7
-
-// ********************* PID ******************** //
-  float Kp = 0.32355;    
-  //float Ki = 0.0;
-  float Ki = 0.00000001;
-  float Kd = 1.1;
- 
-/*
- * float Kp = 0.750
- * float Kd = 1.55;; 
- */
-// ********************************************** //
+#define ENA1 10                    // PWM
+#define Right_in1 9
+#define Right_in2 8
 
 unsigned long lastMilli = 0;       // loop timing
-int PWM_right = 0;
+int pwm_value = 0;
 
-volatile long right_count = 0;
-long prev_right_count = 0;
+volatile long encoder_ticks = 0;
+long prev_encoder_ticks = 0;
 
-double RPM_act_right = 0;  // Actual
-double RPM_req_right_1 = 100; // Desire
-//double RPM_req_right_2 = 50; // Desire
-//double RPM_req_right_3 = 150; // Desire
-//double RPM_req_right_4 = 80; // Desire
+double actual_rpm = 0;  
+double desire_rpm = 50; 
+
 void setup() {  
-  //TCCR0B = TCCR0B & B11111000 | B00000001;   // 62500
-  //TCCR0B = TCCR0B & B11111000 | B00000010;     // 7812
-  //TCCR0B = TCCR0B & B11111000 | B00000011;     // 976
-  //TCCR0B = TCCR0B & B11111000 | B00000100;     // 244
-  //TCCR0B = TCCR0B & B11111000 | B00000101;     // 61
-  //TCCR5B = TCCR5B & B11111000 | B00000101;     // 30
+  //changePwmFrequency();
   Serial.begin(9600);
   setupMotors();
   setupEncoders();
@@ -55,26 +31,31 @@ void loop() {
   unsigned long time_ = millis();
   if (time_ - lastMilli >= 100)   
   {     
-    int x = time_ - lastMilli;
-    getMotorData(x);  
+    long delta_t = time_ - lastMilli;
+    getMotorData(delta_t);  
 
-    PWM_right = updatePid(PWM_right, RPM_req_right_1, RPM_act_right);
+    //pwm_value = 100;
+    pwm_value = updatePid(pwm_value, desire_rpm, actual_rpm,delta_t);
 
-    if (PWM_right > 0 ) {
+    if (pwm_value > 0 ) {
       Forward();
     }
-    else if (PWM_right < 0 ) {
+    else if (pwm_value < 0 ) {
       Backward();
     }
 
-    if (PWM_right == 0 ) {
+    if (pwm_value == 0 ) {
       Release();
     }
     
     lastMilli = time_;
+    
   }
-  
-   Serial.print("      ");Serial.print(int(RPM_act_right));
-   Serial.print("      ");Serial.print(int(RPM_req_right_1));
+   //Serial.print("      ");Serial.print(0);
+   //Serial.print("      ");Serial.print(100);  
+   
+   //Serial.print("      ");Serial.print(time_);  
+   Serial.print("      ");Serial.print(int(actual_rpm));
+   Serial.print("      ");Serial.print(int(desire_rpm));
    Serial.println("      ");   
 }

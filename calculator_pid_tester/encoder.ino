@@ -1,7 +1,7 @@
 void setupEncoders() {
 
-  right_count = 0;
-  prev_right_count = 0;
+  encoder_ticks = 0;
+  prev_encoder_ticks = 0;
 
   pinMode(right_encoderA, INPUT);
   pinMode(right_encoderB, INPUT);
@@ -15,17 +15,17 @@ void setupEncoders() {
 
 void calculate_right_A() {
   if (digitalRead(right_encoderA) == digitalRead(right_encoderB)) {
-    right_count = right_count - 1;
+    encoder_ticks = encoder_ticks - 1;
   }
   else                                                     {
-    right_count = right_count + 1;
+    encoder_ticks = encoder_ticks + 1;
   }
 }
 void calculate_right_B() {
   if (digitalRead(right_encoderA) == digitalRead(right_encoderB)) {
-    right_count = right_count + 1;
+    encoder_ticks = encoder_ticks + 1;
   }
   else                                                     {
-    right_count = right_count - 1;
+    encoder_ticks = encoder_ticks - 1;
   }
 }
