@@ -6,7 +6,7 @@
 #include <WProgram.h>
 #endif
 #include <Wire.h>
-#include "robot_specs.h"
+
 
 //#define right_encoderA      19     // (interrupt numbers 0)       // sittwe left
 //#define right_encoderB      18     // (interrupt numbers 1)
