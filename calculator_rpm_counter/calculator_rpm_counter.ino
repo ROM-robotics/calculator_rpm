@@ -8,12 +8,18 @@
 #include <Wire.h>
 #include "robot_specs.h"
 
+
 #define right_encoderA      19     // (interrupt numbers 0)
 #define right_encoderB      18    // (interrupt numbers 1)
-
 #define ENA1 5
 #define Right_in1 6
 #define Right_in2 7
+
+//#define right_encoderA      3
+//#define right_encoderB      2
+//#define ENA1 10
+//#define Right_in1 8
+//#define Right_in2 9
 
 unsigned long lastMilli = 0;       // loop timing
 int PWM_right = 0;
@@ -43,8 +49,10 @@ void loop() {
     getMotorData(x);  
 
     lastMilli = time_;
+    Serial.print("      ");Serial.print(RPM_act_right);
+    //Serial.print("      ");Serial.print(right_count);
+    Serial.println("      ");   
   }
   
-   Serial.print("      ");Serial.print(RPM_act_right);
-   Serial.println("      ");   
+   
 }

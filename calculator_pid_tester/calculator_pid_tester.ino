@@ -3,12 +3,19 @@
 
 #include "robot_specs.h"
 
-#define right_encoderA      2   
-#define right_encoderB      3
 
-#define ENA1 10                    // PWM
-#define Right_in1 9
-#define Right_in2 8
+#define right_encoderA      19     // (interrupt numbers 0)
+#define right_encoderB      18    // (interrupt numbers 1)
+#define ENA1 5
+#define Right_in1 6
+#define Right_in2 7
+
+//#define right_encoderA      3
+//#define right_encoderB      2
+//#define ENA1 10
+//#define Right_in1 8
+//#define Right_in2 9
+
 
 unsigned long lastMilli = 0;       // loop timing
 int pwm_value = 0;
@@ -17,7 +24,7 @@ volatile long encoder_ticks = 0;
 long prev_encoder_ticks = 0;
 
 double actual_rpm = 0;  
-double desire_rpm = 50; 
+double desire_rpm = 20; 
 
 void setup() {  
   //changePwmFrequency();
